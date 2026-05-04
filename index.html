@@ -3,563 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmo Wu - Computer Science Student</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --dark: #0f172a;
-            --light: #f8fafc;
-            --gray: #64748b;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: var(--light);
-            background: var(--dark);
-            overflow-x: hidden;
-        }
-
-        .nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
-        }
-
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--light);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        section {
-            min-height: 100vh;
-            padding: 6rem 2rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .hero {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: var(--gray);
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease 0.2s backwards;
-        }
-
-        .hero-links {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease 0.4s backwards;
-        }
-
-        .hero-links a {
-            color: var(--light);
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .hero-links a:hover {
-            background: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .card {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: all 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .card-subtitle {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .card-date {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .card-list {
-            list-style: none;
-            margin-top: 1rem;
-        }
-
-        .card-list li {
-            padding-left: 1.5rem;
-            margin-bottom: 0.5rem;
-            position: relative;
-        }
-
-        .card-list li:before {
-            content: "▹";
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .skill-category {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .skill-category h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tag {
-            background: rgba(99, 102, 241, 0.2);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            color: var(--light);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-        }
-
-        .awards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        .award {
-            background: rgba(30, 41, 59, 0.5);
-            border-left: 3px solid var(--accent);
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-in {
-            animation: fadeInUp 0.8s ease;
-        }
-
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            section {
-                padding: 5rem 1rem 2rem;
-            }
-        }
-
-        .gpa {
-            color: var(--accent);
-            font-weight: 700;
-        }
-    </style>
+    <title>Cosmo Wu — Computer Science @ UT Austin</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="nav">
         <div class="nav-content">
-            <div class="logo">CW</div>
+            <a href="index.html" class="logo">CW</a>
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#awards">Awards</a></li>
+                <li><a href="index.html">About</a></li>
+                <li><a href="experience.html">Experience</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="notes.html">Notes</a></li>
             </ul>
         </div>
     </nav>
 
     <section class="hero" id="about">
         <h1 class="hero-title">Cosmo Wu</h1>
-        <p class="hero-subtitle">Computer Science Student @ UT Austin | AI Researcher | Software Engineer</p>
+        <p class="hero-subtitle">CS @ UT Austin · RL Researcher · Software Engineer</p>
         <div class="hero-links">
             <a href="mailto:cosmowu1095@gmail.com">Email</a>
-            <a href="https://github.com/CosmoWuu1579" target="_blank">GitHub</a>
-            <a href="https://www.linkedin.com/in/cosmo-wu1154/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/CosmoWuu1579" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://www.linkedin.com/in/cosmo-wu1154/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="experience.html">Experience →</a>
         </div>
         <div style="text-align: center; max-width: 800px;">
             <p style="font-size: 1.1rem; color: var(--gray); line-height: 1.8;">
-                Passionate about machine learning, robotics, and full-stack development. Currently pursuing a B.S. in Computer Science at UT Austin with a <span class="gpa">4.0 GPA</span>. Published researcher with experience in LLMs, computer vision, and competitive robotics.
+                B.S. Computer Science at UT Austin (<span class="gpa">4.00 GPA</span>, expected May 2028).
+                Currently doing RL research with the Robot Learning Lab + Emerson Electric on autonomous distillation control,
+                building a BLE-connected medical device app at Longhorn Life Sciences, and writing autonomy software
+                for IEEE RAS Robomaster. Interested in machine learning, robotics, control, and full-stack systems.
             </p>
         </div>
-    </section>
 
-    <section id="experience">
-        <h2 class="section-title">Experience</h2>
-        
-        <div class="card">
-            <div class="card-header">
-                <div>
-                    <h3 class="card-title">LLM Research Assistant</h3>
-                    <p class="card-subtitle">University of Houston</p>
-                </div>
-                <span class="card-date">May 2024 – January 2025</span>
-            </div>
-            <ul class="card-list">
-                <li>Deployed 4 LLMs on Google Cloud to answer 250+ law questions via prompt engineering to identify their accuracy as 60%</li>
-                <li>Prepared & tested 20 political science datasets against 15 time-series LLMs to evaluate their usage in the field as ineffective</li>
-                <li>Published at the Association of Computational Linguistics conference on LLMs' limits in generalized domain expertise</li>
-            </ul>
-            <div class="skill-tags" style="margin-top: 1rem;">
-                <span class="tag">Python</span>
-                <span class="tag">PyTorch</span>
-                <span class="tag">Pandas</span>
-                <span class="tag">Google Cloud</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div>
-                    <h3 class="card-title">Software Team Engineer</h3>
-                    <p class="card-subtitle">IEEE RAS Robomaster</p>
-                </div>
-                <span class="card-date">August 2025 – Present</span>
-            </div>
-            <ul class="card-list">
-                <li>Collaborated on the auto navigation logic, enabling the sentry robot to return to its spawn point without human control</li>
-                <li>Built a resupply algorithm with a publisher-subscriber model for the robot to maximize health recovery for the competition</li>
-            </ul>
-            <div class="skill-tags" style="margin-top: 1rem;">
-                <span class="tag">C++</span>
-                <span class="tag">ROS2</span>
-                <span class="tag">Git</span>
-                <span class="tag">Docker</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div>
-                    <h3 class="card-title">Hardware Engineer</h3>
-                    <p class="card-subtitle">ECLAIR</p>
-                </div>
-                <span class="card-date">August 2025 – Present</span>
-            </div>
-            <ul class="card-list">
-                <li>Contributed to PID-driven control design for a self-balancing plate that adjusts motor positions from real-time ball tracking</li>
-                <li>Designed CAD-based actuator parts for 3D-printed motor assemblies and a platform structure to support the system</li>
-            </ul>
-            <div class="skill-tags" style="margin-top: 1rem;">
-                <span class="tag">Fusion 360</span>
-                <span class="tag">C++</span>
-                <span class="tag">MATLAB</span>
-                <span class="tag">Raspberry Pi</span>
-            </div>
+        <div style="margin-top: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; width: 100%; max-width: 900px;">
+            <a href="experience.html" class="post-card">
+                <div class="post-card-title">Experience</div>
+                <div class="post-card-summary">Research and engineering roles in RL, robotics, and embedded systems.</div>
+            </a>
+            <a href="projects.html" class="post-card">
+                <div class="post-card-title">Projects</div>
+                <div class="post-card-summary">Selected personal and academic builds.</div>
+            </a>
+            <a href="blog.html" class="post-card">
+                <div class="post-card-title">Blog</div>
+                <div class="post-card-summary">Writing about what I'm learning and building.</div>
+            </a>
+            <a href="notes.html" class="post-card">
+                <div class="post-card-title">Notes</div>
+                <div class="post-card-summary">Course notes and reference PDFs.</div>
+            </a>
         </div>
     </section>
 
-    <section id="projects">
-        <h2 class="section-title">Projects</h2>
-        
-        <div class="card">
-            <h3 class="card-title">Stock Tracker & Notifier</h3>
-            <p style="margin: 1rem 0; color: var(--gray);">A web application that tracks stock prices and sends automated email notifications based on user-defined price targets and schedules.</p>
-            <ul class="card-list">
-                <li>Utilized SMTP Library to send email updates on a frequency scheduled based on user preference via APScheduler</li>
-                <li>Optimized stock tracking by storing them in PostgreSQL & reduced server resource usage by employing async functions</li>
-                <li>Created a web tool using web scraping to track users' stock prices for daily updates regarding price targets set by them</li>
-            </ul>
-            <div class="skill-tags" style="margin-top: 1rem;">
-                <span class="tag">Python</span>
-                <span class="tag">PostgreSQL</span>
-                <span class="tag">FastAPI</span>
-                <span class="tag">JavaScript</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3 class="card-title">PureChem Calculator & Test Practice Website</h3>
-            <p style="margin: 1rem 0; color: var(--gray);">Educational platform with 150+ chemistry problems helping high school students master complex chemistry concepts.</p>
-            <ul class="card-list">
-                <li>Developed efficient algorithms to simulate complex chemical reactions and evaluate lab data for qualitative results</li>
-                <li>Leveraged Pandas to normalize ~1,000 thermodynamic data points and integrate automated compound state identifiers</li>
-                <li>Deployed the website with 150+ self-written problems through Vercel & Heroku to help ~20 HS students with Chemistry</li>
-            </ul>
-            <div class="skill-tags" style="margin-top: 1rem;">
-                <span class="tag">Python</span>
-                <span class="tag">Flask</span>
-                <span class="tag">ReactJS</span>
-                <span class="tag">Pandas</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3 class="card-title">Computer Vision Protocol with Microcontroller</h3>
-            <p style="margin: 1rem 0; color: var(--gray);">Real-time computer vision system that detects hand gestures and communicates with microcontrollers for interactive displays.</p>
-            <ul class="card-list">
-                <li>Built a serial-based computer-to-microcontroller protocol enabling real-time OLED outputs triggered by user finger actions</li>
-                <li>Trained a custom YOLO model on ~180 Kaggle images and designed a Mediapipe pipeline to detect finger counts</li>
-                <li>Engineered a tree-structured encoding system to convert detected numeric inputs into dynamic message outputs</li>
-            </ul>
-            <div class="skill-tags" style="margin-top: 1rem;">
-                <span class="tag">Python</span>
-                <span class="tag">C++</span>
-                <span class="tag">OpenCV</span>
-                <span class="tag">YOLO</span>
-                <span class="tag">ESP32</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3 class="card-title">Hong Kong Subway Navigator Website</h3>
-            <p style="margin: 1rem 0; color: var(--gray);">Full-stack transit navigation application with real-time updates and optimal route planning.</p>
-            <ul class="card-list">
-                <li>Utilized Dijkstra's Algorithm and OOP to optimize identifying the shortest 2-station path to help users navigate the system</li>
-                <li>Connected Java & Flask servers with REST API calls & wrote 250+ repetitive Java OOP lines using Pandas dataframes</li>
-                <li>Implemented real-time announcement updates to users via WebSocket and displayed/stored past ones with Supabase SQL</li>
-            </ul>
-            <div class="skill-tags" style="margin-top: 1rem;">
-                <span class="tag">Java Spring Boot</span>
-                <span class="tag">Flask</span>
-                <span class="tag">PostgreSQL</span>
-                <span class="tag">WebSocket</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills">
-        <h2 class="section-title">Technical Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-category">
-                <h3>Languages</h3>
-                <div class="skill-tags">
-                    <span class="tag">C++/C</span>
-                    <span class="tag">Python</span>
-                    <span class="tag">Java</span>
-                    <span class="tag">JavaScript</span>
-                    <span class="tag">SQL</span>
-                    <span class="tag">HTML/CSS</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3>Frameworks & Tools</h3>
-                <div class="skill-tags">
-                    <span class="tag">PyTorch</span>
-                    <span class="tag">Pandas</span>
-                    <span class="tag">NumPy</span>
-                    <span class="tag">Scikit-Learn</span>
-                    <span class="tag">ROS2</span>
-                    <span class="tag">Docker</span>
-                    <span class="tag">Git</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3>Specializations</h3>
-                <div class="skill-tags">
-                    <span class="tag">Machine Learning</span>
-                    <span class="tag">Deep Learning</span>
-                    <span class="tag">Computer Vision</span>
-                    <span class="tag">Full-Stack Development</span>
-                    <span class="tag">Data Engineering</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3>Hardware & Design</h3>
-                <div class="skill-tags">
-                    <span class="tag">Fusion 360</span>
-                    <span class="tag">3D Printing</span>
-                    <span class="tag">Microcontrollers</span>
-                    <span class="tag">Raspberry Pi</span>
-                    <span class="tag">Arduino</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="awards">
-        <h2 class="section-title">Honors & Awards</h2>
-        <div class="awards-grid">
-            <div class="award">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">US National Chemistry Olympiad Honors</h4>
-                <p style="color: var(--gray);">Top 150 in United States</p>
-            </div>
-            <div class="award">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">IBM x UT Qiskit Fall Fest</h4>
-                <p style="color: var(--gray);">1st Place</p>
-            </div>
-            <div class="award">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Mu Alpha Theta Scholarship</h4>
-                <p style="color: var(--gray);">1 of 27 nationwide</p>
-            </div>
-            <div class="award">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">USACO Silver Division</h4>
-                <p style="color: var(--gray);">Top 22.5% in US</p>
-            </div>
-            <div class="award">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">AIME Qualifier</h4>
-                <p style="color: var(--gray);">3x Qualifier (Top 3% in US)</p>
-            </div>
-            <div class="award">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Texas State Champion</h4>
-                <p style="color: var(--gray);">UIL Chemistry & TMSCA Physics Top Gun</p>
-            </div>
-        </div>
-
-        <div class="card" style="margin-top: 2rem;">
-            <h3 class="card-title">Leadership: Dulles Mu Alpha Theta President</h3>
-            <p class="card-subtitle">May 2024 – May 2025</p>
-            <ul class="card-list" style="margin-top: 1rem;">
-                <li>Wrote 150+ unique problems in LaTeX for Math Bash competition's 2nd debut for 3rd-8th graders</li>
-                <li>Raised $9,000 via outreach expansion, doubling participant numbers to 350</li>
-                <li>Secured sponsorships from STEM organizations</li>
-            </ul>
-        </div>
-    </section>
-
-    <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Animate elements on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.card, .skill-category, .award').forEach(el => {
-            observer.observe(el);
-        });
-    </script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

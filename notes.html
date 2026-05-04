@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes — Cosmo Wu</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="logo">CW</a>
+            <ul class="nav-links">
+                <li><a href="index.html">About</a></li>
+                <li><a href="experience.html">Experience</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="notes.html">Notes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="notes">
+        <h2 class="section-title">Notes</h2>
+        <p class="section-subtitle">Course notes, reference sheets, and other PDFs. Click any note to view it inline.</p>
+
+        <div id="note-list" class="post-grid">
+            <p style="color: var(--gray); grid-column: 1 / -1; text-align: center;">Loading notes…</p>
+        </div>
+
+        <div id="viewer-wrap" class="pdf-viewer-wrap" style="display: none;">
+            <div class="pdf-viewer-toolbar">
+                <h3 id="viewer-title"></h3>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a id="viewer-download" href="#" download>Download</a>
+                    <a id="viewer-close" href="#" onclick="closeViewer(); return false;">Close</a>
+                </div>
+            </div>
+            <iframe id="viewer-frame" class="pdf-viewer" title="PDF viewer"></iframe>
+        </div>
+    </section>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        let notesCache = [];
+
+        (async function () {
+            const list = document.getElementById('note-list');
+            try {
+                const res = await fetch('notes/notes.json', { cache: 'no-cache' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const notes = await res.json();
+                notesCache = Array.isArray(notes) ? notes : [];
+
+                if (notesCache.length === 0) {
+                    list.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">No notes yet. Drop a PDF into the <code>notes/</code> folder and add an entry to <code>notes/notes.json</code>.</div>';
+                    return;
+                }
+
+                notesCache.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+                list.innerHTML = notesCache.map((n, i) => {
+                    const tags = (n.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+                    const meta = [n.course, n.date].filter(Boolean).map(x => `<span>${escapeHtml(x)}</span>`).join('');
+                    return `
+                        <a class="post-card" href="#" onclick="openViewer(${i}); return false;">
+                            <div class="post-card-meta">${meta}</div>
+                            <div class="post-card-title">${escapeHtml(n.title)}</div>
+                            <div class="post-card-summary">${escapeHtml(n.summary || '')}</div>
+                            <div class="post-card-tags">${tags}</div>
+                        </a>
+                    `;
+                }).join('');
+
+                document.querySelectorAll('.post-card').forEach(el => el.classList.add('animate-in'));
+
+                // If URL has ?note=filename.pdf, open it directly
+                const params = new URLSearchParams(window.location.search);
+                const requested = params.get('note');
+                if (requested) {
+                    const idx = notesCache.findIndex(n => n.file === requested);
+                    if (idx >= 0) openViewer(idx);
+                }
+            } catch (err) {
+                list.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        Could not load notes. If you're viewing locally, open via a server (e.g. <code>python -m http.server</code>) instead of <code>file://</code>.
+                    </div>`;
+                console.error(err);
+            }
+        })();
+
+        function openViewer(index) {
+            const note = notesCache[index];
+            if (!note) return;
+            const url = 'notes/' + note.file;
+            document.getElementById('viewer-title').textContent = note.title;
+            document.getElementById('viewer-frame').src = url;
+            document.getElementById('viewer-download').href = url;
+            document.getElementById('viewer-download').setAttribute('download', note.file);
+            const wrap = document.getElementById('viewer-wrap');
+            wrap.style.display = 'block';
+            wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            const params = new URLSearchParams(window.location.search);
+            params.set('note', note.file);
+            history.replaceState(null, '', '?' + params.toString());
+        }
+
+        function closeViewer() {
+            const wrap = document.getElementById('viewer-wrap');
+            wrap.style.display = 'none';
+            document.getElementById('viewer-frame').src = '';
+            history.replaceState(null, '', window.location.pathname);
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+    </script>
+</body>
+</html>

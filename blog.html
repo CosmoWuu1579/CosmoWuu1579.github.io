@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog — Cosmo Wu</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="logo">CW</a>
+            <ul class="nav-links">
+                <li><a href="index.html">About</a></li>
+                <li><a href="experience.html">Experience</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="notes.html">Notes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="blog">
+        <h2 class="section-title">Blog</h2>
+        <p class="section-subtitle">Notes on what I'm learning, building, and thinking about.</p>
+
+        <div id="post-list" class="post-grid">
+            <p style="color: var(--gray); grid-column: 1 / -1; text-align: center;">Loading posts…</p>
+        </div>
+    </section>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        (async function () {
+            const list = document.getElementById('post-list');
+            try {
+                const res = await fetch('blog/posts.json', { cache: 'no-cache' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const posts = await res.json();
+
+                if (!Array.isArray(posts) || posts.length === 0) {
+                    list.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">No posts yet. Add entries to <code>blog/posts.json</code>.</div>';
+                    return;
+                }
+
+                posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+                list.innerHTML = posts.map(p => {
+                    const tags = (p.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+                    const date = p.date ? `<span>${escapeHtml(p.date)}</span>` : '';
+                    const readTime = p.readTime ? `<span>${escapeHtml(p.readTime)}</span>` : '';
+                    return `
+                        <a class="post-card" href="${escapeAttr(p.url)}">
+                            <div class="post-card-meta">${date}${readTime}</div>
+                            <div class="post-card-title">${escapeHtml(p.title)}</div>
+                            <div class="post-card-summary">${escapeHtml(p.summary || '')}</div>
+                            <div class="post-card-tags">${tags}</div>
+                        </a>
+                    `;
+                }).join('');
+
+                // re-observe newly added cards for fade-in animation
+                document.querySelectorAll('.post-card').forEach(el => el.classList.add('animate-in'));
+            } catch (err) {
+                list.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        Could not load posts. If you're viewing locally, open via a server (e.g. <code>python -m http.server</code>) instead of <code>file://</code>.
+                    </div>`;
+                console.error(err);
+            }
+        })();
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+        function escapeAttr(s) { return escapeHtml(s); }
+    </script>
+</body>
+</html>
