@@ -18,3 +18,31 @@ Each post is a standalone HTML file in this folder. To add a new post:
 ```
 
 Posts are sorted by `date` (newest first) automatically.
+
+## Writing LaTeX
+
+The template loads KaTeX from a CDN and auto-renders math anywhere in the post.
+Use any of these delimiter pairs:
+
+| Inline                | Display                |
+| --------------------- | ---------------------- |
+| `$ ... $`             | `$$ ... $$`            |
+| `\( ... \)`           | `\[ ... \]`            |
+
+Example:
+
+```html
+<p>The variance is $\sigma^2 = \mathbb{E}[(X - \mu)^2]$.</p>
+
+<p>$$ \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi} $$</p>
+```
+
+A few gotchas:
+
+- **HTML escaping wins first.** `<`, `>`, and `&` inside math should be written as
+  `\lt`, `\gt`, `\&` (or use `&lt;`/`&gt;`/`&amp;`). Otherwise the browser eats them
+  before KaTeX sees them.
+- **Backslashes in attributes.** Inside HTML attributes, double them: `\\frac` not `\frac`.
+- **Dollar signs in prose.** A literal `$` followed later by another `$` will be
+  parsed as math. Escape with `\$` when you mean currency.
+- KaTeX's full function list: <https://katex.org/docs/supported.html>.

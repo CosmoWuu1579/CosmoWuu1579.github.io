@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello, world — Cosmo Wu</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- KaTeX (LaTeX rendering) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}], throwOnError: false});"></script>
 </head>
 <body>
     <nav class="nav">
@@ -47,6 +52,19 @@
                 The site is plain HTML/CSS/JS — no framework, no build step. Posts live in
                 <code>blog/</code> as standalone HTML files, and the listing is driven by a small
                 <code>posts.json</code>. To add a new post, write the HTML and add an entry to the JSON file.
+            </p>
+
+            <h2>LaTeX support</h2>
+            <p>
+                Posts can include math via KaTeX. Inline like $E = mc^2$ or the Bellman update
+                $V(s) \leftarrow V(s) + \alpha\bigl(r + \gamma V(s') - V(s)\bigr)$, and display math like:
+            </p>
+            <p>
+                $$ \nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\!\left[ \sum_{t=0}^{T} \nabla_\theta \log \pi_\theta(a_t \mid s_t) \, R(\tau) \right] $$
+            </p>
+            <p>
+                Both <code>$...$</code> / <code>$$...$$</code> and <code>\(...\)</code> / <code>\[...\]</code>
+                delimiters work.
             </p>
 
             <p>More soon.</p>
