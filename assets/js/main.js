@@ -1,4 +1,4 @@
-// Smooth scrolling for in-page anchors
+// Smooth-scroll for in-page anchors
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
@@ -34,5 +34,27 @@ document.querySelectorAll('.card, .skill-category, .award, .post-card').forEach(
         if (file === path || (path === '' && file === 'index.html')) {
             link.classList.add('active');
         }
+    });
+})();
+
+// Theme toggle — initial paint is set by an inline script in <head> to prevent FOUC
+(function () {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+
+    toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (_) {}
+    });
+
+    // If the user hasn't picked a theme, follow system changes live
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener('change', (e) => {
+        try {
+            if (localStorage.getItem('theme')) return;
+        } catch (_) {}
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
     });
 })();

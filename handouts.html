@@ -4,29 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Handouts — Cosmo Wu</title>
+
+    <script>(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',t||(d?'dark':'light'));}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="nav">
         <div class="nav-content">
-            <a href="index.html" class="logo">CW</a>
-            <ul class="nav-links">
-                <li><a href="index.html">About</a></li>
-                <li><a href="experience.html">Experience</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="notes.html">Notes</a></li>
-                <li><a href="handouts.html">Handouts</a></li>
-            </ul>
+            <a href="index.html" class="logo">Cosmo Wu<span class="logo-dot">.</span></a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">About</a></li>
+                    <li><a href="experience.html">Experience</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="notes.html">Notes</a></li>
+                    <li><a href="handouts.html">Handouts</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                </button>
+            </div>
         </div>
     </nav>
 
     <section id="handouts">
-        <h2 class="section-title">Handouts</h2>
-        <p class="section-subtitle">Problem sets and worksheets I've written. Click any handout to view it inline.</p>
+        <div class="section-head">
+            <p class="eyebrow">Practice</p>
+            <h2 class="section-title">Handouts</h2>
+            <p class="section-subtitle">Problem sets and worksheets I've written. Click any handout to view it inline.</p>
+        </div>
 
         <div id="handout-list" class="post-grid">
-            <p style="color: var(--gray); grid-column: 1 / -1; text-align: center;">Loading handouts…</p>
+            <p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center;">Loading handouts…</p>
         </div>
 
         <div id="viewer-wrap" class="pdf-viewer-wrap" style="display: none;">
