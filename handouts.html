@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes — Cosmo Wu</title>
+    <title>Handouts — Cosmo Wu</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -21,12 +21,12 @@
         </div>
     </nav>
 
-    <section id="notes">
-        <h2 class="section-title">Notes</h2>
-        <p class="section-subtitle">Course notes, reference sheets, and other PDFs. Click any note to view it inline.</p>
+    <section id="handouts">
+        <h2 class="section-title">Handouts</h2>
+        <p class="section-subtitle">Problem sets and worksheets I've written. Click any handout to view it inline.</p>
 
-        <div id="note-list" class="post-grid">
-            <p style="color: var(--gray); grid-column: 1 / -1; text-align: center;">Loading notes…</p>
+        <div id="handout-list" class="post-grid">
+            <p style="color: var(--gray); grid-column: 1 / -1; text-align: center;">Loading handouts…</p>
         </div>
 
         <div id="viewer-wrap" class="pdf-viewer-wrap" style="display: none;">
@@ -43,31 +43,31 @@
 
     <script src="assets/js/main.js"></script>
     <script>
-        let notesCache = [];
+        let handoutsCache = [];
 
         (async function () {
-            const list = document.getElementById('note-list');
+            const list = document.getElementById('handout-list');
             try {
-                const res = await fetch('notes/notes.json', { cache: 'no-cache' });
+                const res = await fetch('handouts/handouts.json', { cache: 'no-cache' });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                const notes = await res.json();
-                notesCache = Array.isArray(notes) ? notes : [];
+                const handouts = await res.json();
+                handoutsCache = Array.isArray(handouts) ? handouts : [];
 
-                if (notesCache.length === 0) {
-                    list.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">No notes yet. Drop a PDF into the <code>notes/</code> folder and add an entry to <code>notes/notes.json</code>.</div>';
+                if (handoutsCache.length === 0) {
+                    list.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">No handouts yet. Drop a PDF into the <code>handouts/</code> folder and add an entry to <code>handouts/handouts.json</code>.</div>';
                     return;
                 }
 
-                notesCache.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                handoutsCache.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-                list.innerHTML = notesCache.map((n, i) => {
-                    const tags = (n.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
-                    const meta = [n.course, n.date].filter(Boolean).map(x => `<span>${escapeHtml(x)}</span>`).join('');
+                list.innerHTML = handoutsCache.map((h, i) => {
+                    const tags = (h.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+                    const meta = [h.subject, h.difficulty, h.date].filter(Boolean).map(x => `<span>${escapeHtml(x)}</span>`).join('');
                     return `
                         <a class="post-card" href="#" onclick="openViewer(${i}); return false;">
                             <div class="post-card-meta">${meta}</div>
-                            <div class="post-card-title">${escapeHtml(n.title)}</div>
-                            <div class="post-card-summary">${escapeHtml(n.summary || '')}</div>
+                            <div class="post-card-title">${escapeHtml(h.title)}</div>
+                            <div class="post-card-summary">${escapeHtml(h.summary || '')}</div>
                             <div class="post-card-tags">${tags}</div>
                         </a>
                     `;
@@ -75,36 +75,35 @@
 
                 document.querySelectorAll('.post-card').forEach(el => el.classList.add('animate-in'));
 
-                // If URL has ?note=filename.pdf, open it directly
                 const params = new URLSearchParams(window.location.search);
-                const requested = params.get('note');
+                const requested = params.get('handout');
                 if (requested) {
-                    const idx = notesCache.findIndex(n => n.file === requested);
+                    const idx = handoutsCache.findIndex(h => h.file === requested);
                     if (idx >= 0) openViewer(idx);
                 }
             } catch (err) {
                 list.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
-                        Could not load notes. If you're viewing locally, open via a server (e.g. <code>python -m http.server</code>) instead of <code>file://</code>.
+                        Could not load handouts. If you're viewing locally, open via a server (e.g. <code>python -m http.server</code>) instead of <code>file://</code>.
                     </div>`;
                 console.error(err);
             }
         })();
 
         function openViewer(index) {
-            const note = notesCache[index];
-            if (!note) return;
-            const url = 'notes/' + note.file;
-            document.getElementById('viewer-title').textContent = note.title;
+            const handout = handoutsCache[index];
+            if (!handout) return;
+            const url = 'handouts/' + handout.file;
+            document.getElementById('viewer-title').textContent = handout.title;
             document.getElementById('viewer-frame').src = url;
             document.getElementById('viewer-download').href = url;
-            document.getElementById('viewer-download').setAttribute('download', note.file);
+            document.getElementById('viewer-download').setAttribute('download', handout.file);
             const wrap = document.getElementById('viewer-wrap');
             wrap.style.display = 'block';
             wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             const params = new URLSearchParams(window.location.search);
-            params.set('note', note.file);
+            params.set('handout', handout.file);
             history.replaceState(null, '', '?' + params.toString());
         }
 
