@@ -40,6 +40,29 @@ document.querySelectorAll('.card, .skill-category, .award, .post-card').forEach(
     });
 })();
 
+// Intercept clicks to the current page — scroll to top instead of doing a no-op nav.
+// Without this, clicking the logo/About on the page you're already on can leave a stale
+// "/index.html" in the URL bar (browser doesn't always re-canonicalize on same-page nav).
+(function () {
+    const normalize = (p) => p.endsWith('/') ? p : p + '/';
+
+    document.querySelectorAll('.nav a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (!href) return;
+        if (href.startsWith('http') || href.startsWith('mailto') || href.startsWith('#')) return;
+
+        link.addEventListener('click', (e) => {
+            const here = normalize(window.location.pathname.replace(/index\.html$/, ''));
+            const target = normalize(href);
+            if (here === target) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                history.replaceState(null, '', target);
+            }
+        });
+    });
+})();
+
 // Theme toggle — initial paint is set by an inline script in <head> to prevent FOUC
 (function () {
     const toggle = document.getElementById('theme-toggle');
