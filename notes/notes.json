@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "title": "Testing",
+        "subject": "Math",
+        "difficulty": "Intro",
+        "summary": "I'm just tryna see if this works.",
+        "date": "2026-04-20",
+        "tags": ["math", "warmup"],
+        "file": "for_testing.pdf"
+    }
+]
