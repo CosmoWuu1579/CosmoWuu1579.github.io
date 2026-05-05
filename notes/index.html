@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Handouts — Cosmo Wu</title>
+    <title>Notes — Cosmo Wu</title>
 
     <script>(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',t||(d?'dark':'light'));}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
     <nav class="nav">
         <div class="nav-content">
-            <a href="index.html" class="logo">Cosmo Wu<span class="logo-dot">.</span></a>
+            <a href="/" class="logo">Cosmo Wu<span class="logo-dot">.</span></a>
             <div class="nav-right">
                 <ul class="nav-links">
-                    <li><a href="index.html">About</a></li>
-                    <li><a href="experience.html">Experience</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="notes.html">Notes</a></li>
-                    <li><a href="handouts.html">Handouts</a></li>
+                    <li><a href="/">About</a></li>
+                    <li><a href="/experience/">Experience</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/notes/">Notes</a></li>
+                    <li><a href="/handouts/">Handouts</a></li>
                 </ul>
                 <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
                     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -33,15 +33,15 @@
         </div>
     </nav>
 
-    <section id="handouts">
+    <section id="notes">
         <div class="section-head">
-            <p class="eyebrow">Practice</p>
-            <h2 class="section-title">Handouts</h2>
-            <p class="section-subtitle">Problem sets and worksheets I've written. Click any handout to view it inline.</p>
+            <p class="eyebrow">Library</p>
+            <h2 class="section-title">Notes</h2>
+            <p class="section-subtitle">Course notes, reference sheets, and other PDFs. Click any note to view it inline.</p>
         </div>
 
-        <div id="handout-list" class="post-grid">
-            <p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center;">Loading handouts…</p>
+        <div id="note-list" class="post-grid">
+            <p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center;">Loading notes…</p>
         </div>
 
         <div id="viewer-wrap" class="pdf-viewer-wrap" style="display: none;">
@@ -56,33 +56,33 @@
         </div>
     </section>
 
-    <script src="assets/js/main.js"></script>
+    <script src="/assets/js/main.js"></script>
     <script>
-        let handoutsCache = [];
+        let notesCache = [];
 
         (async function () {
-            const list = document.getElementById('handout-list');
+            const list = document.getElementById('note-list');
             try {
-                const res = await fetch('handouts/handouts.json', { cache: 'no-cache' });
+                const res = await fetch('/notes/notes.json', { cache: 'no-cache' });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                const handouts = await res.json();
-                handoutsCache = Array.isArray(handouts) ? handouts : [];
+                const notes = await res.json();
+                notesCache = Array.isArray(notes) ? notes : [];
 
-                if (handoutsCache.length === 0) {
-                    list.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">No handouts yet. Drop a PDF into the <code>handouts/</code> folder and add an entry to <code>handouts/handouts.json</code>.</div>';
+                if (notesCache.length === 0) {
+                    list.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">No notes yet. Drop a PDF into the <code>notes/</code> folder and add an entry to <code>notes/notes.json</code>.</div>';
                     return;
                 }
 
-                handoutsCache.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                notesCache.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-                list.innerHTML = handoutsCache.map((h, i) => {
-                    const tags = (h.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
-                    const meta = [h.subject, h.difficulty, h.date].filter(Boolean).map(x => `<span>${escapeHtml(x)}</span>`).join('');
+                list.innerHTML = notesCache.map((n, i) => {
+                    const tags = (n.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+                    const meta = [n.course, n.date].filter(Boolean).map(x => `<span>${escapeHtml(x)}</span>`).join('');
                     return `
                         <a class="post-card" href="#" onclick="openViewer(${i}); return false;">
                             <div class="post-card-meta">${meta}</div>
-                            <div class="post-card-title">${escapeHtml(h.title)}</div>
-                            <div class="post-card-summary">${escapeHtml(h.summary || '')}</div>
+                            <div class="post-card-title">${escapeHtml(n.title)}</div>
+                            <div class="post-card-summary">${escapeHtml(n.summary || '')}</div>
                             <div class="post-card-tags">${tags}</div>
                         </a>
                     `;
@@ -90,35 +90,36 @@
 
                 document.querySelectorAll('.post-card').forEach(el => el.classList.add('animate-in'));
 
+                // If URL has ?note=filename.pdf, open it directly
                 const params = new URLSearchParams(window.location.search);
-                const requested = params.get('handout');
+                const requested = params.get('note');
                 if (requested) {
-                    const idx = handoutsCache.findIndex(h => h.file === requested);
+                    const idx = notesCache.findIndex(n => n.file === requested);
                     if (idx >= 0) openViewer(idx);
                 }
             } catch (err) {
                 list.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
-                        Could not load handouts. If you're viewing locally, open via a server (e.g. <code>python -m http.server</code>) instead of <code>file://</code>.
+                        Could not load notes. If you're viewing locally, open via a server (e.g. <code>python -m http.server</code>) instead of <code>file://</code>.
                     </div>`;
                 console.error(err);
             }
         })();
 
         function openViewer(index) {
-            const handout = handoutsCache[index];
-            if (!handout) return;
-            const url = 'handouts/' + handout.file;
-            document.getElementById('viewer-title').textContent = handout.title;
+            const note = notesCache[index];
+            if (!note) return;
+            const url = '/notes/' + note.file;
+            document.getElementById('viewer-title').textContent = note.title;
             document.getElementById('viewer-frame').src = url;
             document.getElementById('viewer-download').href = url;
-            document.getElementById('viewer-download').setAttribute('download', handout.file);
+            document.getElementById('viewer-download').setAttribute('download', note.file);
             const wrap = document.getElementById('viewer-wrap');
             wrap.style.display = 'block';
             wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             const params = new URLSearchParams(window.location.search);
-            params.set('handout', handout.file);
+            params.set('note', note.file);
             history.replaceState(null, '', '?' + params.toString());
         }
 

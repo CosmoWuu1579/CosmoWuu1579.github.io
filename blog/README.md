@@ -1,9 +1,10 @@
 # Blog
 
-Each post is a standalone HTML file in this folder. To add a new post:
+Each post lives in its own folder as `index.html` so it gets a clean URL
+(`/blog/my-post/` instead of `/blog/my-post.html`). To add a new post:
 
-1. Copy `2026-05-03-hello-world.html` to a new file (e.g. `2026-06-01-my-post.html`).
-2. Edit the `<title>`, `<h1>`, date, and body content.
+1. Copy `2026-05-03-hello-world/` to a new folder (e.g. `2026-06-01-my-post/`).
+2. Edit the `<title>`, `<h1>`, date, and body content of the inner `index.html`.
 3. Add a new entry to `posts.json` at the top of the array:
 
 ```json
@@ -13,7 +14,7 @@ Each post is a standalone HTML file in this folder. To add a new post:
     "date": "2026-06-01",
     "readTime": "5 min read",
     "tags": ["robotics", "rl"],
-    "url": "blog/2026-06-01-my-post.html"
+    "url": "/blog/2026-06-01-my-post/"
 }
 ```
 

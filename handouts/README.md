@@ -1,7 +1,7 @@
 # Handouts
 
 Problem sets and worksheets I've written. PDFs that should appear on
-`/handouts.html` live in this folder; the listing is driven by `handouts.json`.
+`/handouts/` live in this folder; the listing is driven by `handouts.json`.
 
 ## Adding a new handout
 
@@ -34,4 +34,4 @@ Field reference:
 | summary    | no       | One- or two-line description.                          |
 | tags       | no       | Array of strings, rendered as tag chips.               |
 
-Direct-link to a specific handout: `handouts.html?handout=your-file.pdf`.
+Direct-link to a specific handout: `/handouts/?handout=your-file.pdf`.

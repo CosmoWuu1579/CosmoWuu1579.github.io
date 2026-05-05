@@ -1,6 +1,6 @@
 # Notes
 
-PDFs that should appear on the `/notes.html` page live in this folder.
+PDFs that should appear on the `/notes/` page live in this folder.
 The listing is driven by `notes.json`.
 
 ## Adding a new note
@@ -37,4 +37,4 @@ Field reference:
 The notes page renders each PDF in an inline `<iframe>` viewer with a Download
 button. Browsers handle PDF rendering natively — no PDF.js needed.
 
-Direct-link to a specific note: `notes.html?note=your-file.pdf`.
+Direct-link to a specific note: `/notes/?note=your-file.pdf`.

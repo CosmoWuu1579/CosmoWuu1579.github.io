@@ -24,14 +24,17 @@ document.querySelectorAll('.card, .skill-category, .award, .post-card').forEach(
     observer.observe(el);
 });
 
-// Highlight active nav link based on current page filename
+// Highlight active nav link based on current path
 (function () {
-    const path = window.location.pathname.split('/').pop() || 'index.html';
+    const rawPath = window.location.pathname;
+    const path = rawPath.endsWith('/') ? rawPath : rawPath + '/';
     document.querySelectorAll('.nav-links a').forEach(link => {
         const href = link.getAttribute('href');
         if (!href) return;
-        const file = href.split('/').pop();
-        if (file === path || (path === '' && file === 'index.html')) {
+        const target = href.endsWith('/') ? href : href + '/';
+        if (target === '/') {
+            if (path === '/') link.classList.add('active');
+        } else if (path === target || path.startsWith(target)) {
             link.classList.add('active');
         }
     });
