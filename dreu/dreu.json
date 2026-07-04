@@ -1,0 +1,52 @@
+{
+    "student": "Cosmo Wu",
+    "studentSub": "B.S. Computer Science, The University of Texas at Austin",
+    "mentor": "Samee Khan & Ramin Salehi",
+    "mentorSub": "ECE Department, Kansas State University",
+    "program": "DREU — Distributed Research Experiences for Undergraduates",
+    "term": "Summer 2026 · Manhattan, KS",
+    "focus": "Building a LangGraph multi-agent framework (propose, validate, evaluate, review) to automate quantum circuit discovery.",
+
+    "weeks": [
+        {
+            "week": 1,
+            "title": "Onboarding & environment setup",
+            "date": "Jun 1 – Jun 5, 2026",
+            "goals": [
+                "Meet the research group and align on the summer roadmap",
+                "Set up the development environment (Qiskit, LangGraph, PyTorch)",
+                "Read background papers on agentic pipelines for circuit synthesis"
+            ],
+            "approach": [
+                "Installed and version-pinned the full toolchain in a reproducible conda environment",
+                "Reproduced a baseline variational circuit example end-to-end in Qiskit",
+                "Sketched the propose → validate → evaluate → review agent graph on the whiteboard"
+            ],
+            "results": [
+                "Working dev environment verified against the baseline example",
+                "One-page summary of the agent architecture shared with my mentor"
+            ],
+            "notes": [
+                "This is a sample entry — edit dreu/dreu.json to replace it with your real Week 1"
+            ]
+        }
+    ],
+
+    "reports": [
+        {
+            "title": "Sample Report",
+            "date": "2026-06-05",
+            "summary": "Placeholder PDF so the viewer has something to show — replace with your own reports.",
+            "file": "sample_report.pdf",
+            "tags": ["sample"]
+        }
+    ],
+
+    "updates": [
+        {
+            "date": "2026-06-01",
+            "title": "DREU journal is live",
+            "body": "This page will track my summer research at Kansas State University — weekly logs, reports, and anything else worth sharing along the way."
+        }
+    ]
+}

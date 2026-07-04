@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/qft_pfp.png">
+    <link rel="apple-touch-icon" href="/qft_pfp.png">
+    <title>DREU — Cosmo Wu</title>
+
+    <script>(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',t||(d?'dark':'light'));}catch(e){document.documentElement.setAttribute('data-theme','light');}try{var p=location.pathname;if(p.endsWith('/index.html')){history.replaceState(null,'',p.slice(0,-10)+location.search+location.hash);}}catch(e){}})();</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="/" class="logo">Cosmo Wu<span class="logo-dot">.</span></a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="/">About</a></li>
+                    <li><a href="/experience/">Experience</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                    <li><a href="/dreu/">DREU</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/notes/">Notes</a></li>
+                    <li><a href="/handouts/">Handouts</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="dreu-intro">
+        <div class="section-head">
+            <p class="eyebrow">Summer Research</p>
+            <h2 class="section-title">DREU Research Journal</h2>
+            <p class="section-subtitle" id="dreu-focus">Loading…</p>
+        </div>
+
+        <div class="card card-featured" id="dreu-profile-card">
+            <div class="dreu-profile" id="dreu-profile"></div>
+        </div>
+    </section>
+
+    <section id="dreu-weeks">
+        <div class="section-head">
+            <p class="eyebrow">Weekly Log</p>
+            <h2 class="section-title">Week by Week</h2>
+            <p class="section-subtitle">Goals, approach, results, and notes for each week of the program.</p>
+        </div>
+
+        <div class="timeline" id="week-list">
+            <p style="color: var(--text-muted);">Loading weeks…</p>
+        </div>
+    </section>
+
+    <section id="dreu-reports">
+        <div class="section-head">
+            <p class="eyebrow">Documents</p>
+            <h2 class="section-title">Reports &amp; PDFs</h2>
+            <p class="section-subtitle">Write-ups, slides, and papers from the program. Click any card to view it inline.</p>
+        </div>
+
+        <div id="report-list" class="post-grid">
+            <p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center;">Loading reports…</p>
+        </div>
+
+        <div id="viewer-wrap" class="pdf-viewer-wrap" style="display: none;">
+            <div class="pdf-viewer-toolbar">
+                <h3 id="viewer-title"></h3>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a id="viewer-download" href="#" download>Download</a>
+                    <a id="viewer-close" href="#" onclick="closeViewer(); return false;">Close</a>
+                </div>
+            </div>
+            <iframe id="viewer-frame" class="pdf-viewer" title="PDF viewer"></iframe>
+        </div>
+    </section>
+
+    <section id="dreu-updates">
+        <div class="section-head">
+            <p class="eyebrow">Signal</p>
+            <h2 class="section-title">Extra Updates</h2>
+            <p class="section-subtitle">Anything else worth sharing between the weekly logs.</p>
+        </div>
+
+        <div id="update-list">
+            <p style="color: var(--text-muted);">Loading updates…</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        © 2026 Cosmo Wu · DREU is sponsored by the CRA Committee on Widening Participation in Computing Research.
+    </footer>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let reportsCache = [];
+
+        (async function () {
+            try {
+                const res = await fetch('/dreu/dreu.json', { cache: 'no-cache' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                renderProfile(data);
+                renderWeeks(data.weeks || []);
+                renderReports(data.reports || []);
+                renderUpdates(data.updates || []);
+                if (window.observeReveals) window.observeReveals(document);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('dreu-focus').textContent = '';
+                document.getElementById('dreu-profile').innerHTML = '';
+                document.getElementById('week-list').innerHTML =
+                    '<div class="empty-state">Could not load <code>dreu/dreu.json</code>. If you\'re viewing locally, open via a server (e.g. <code>python -m http.server</code>) instead of <code>file://</code>.</div>';
+                document.getElementById('report-list').innerHTML = '';
+                document.getElementById('update-list').innerHTML = '';
+            }
+        })();
+
+        function renderProfile(data) {
+            document.getElementById('dreu-focus').textContent = data.focus || '';
+            const fields = [
+                ['Student', data.student, data.studentSub],
+                ['Mentor', data.mentor, data.mentorSub],
+                ['Program', data.program, null],
+                ['Term', data.term, null]
+            ].filter(f => f[1]);
+
+            document.getElementById('dreu-profile').innerHTML = fields.map(([label, value, sub]) => `
+                <div class="dreu-field">
+                    <div class="dreu-label">${escapeHtml(label)}</div>
+                    <div class="dreu-value">${escapeHtml(value)}${sub ? `<span class="dreu-sub">${escapeHtml(sub)}</span>` : ''}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderWeeks(weeks) {
+            const list = document.getElementById('week-list');
+            if (weeks.length === 0) {
+                list.innerHTML = '<div class="empty-state">No weeks logged yet. Add entries to the <code>weeks</code> array in <code>dreu/dreu.json</code>.</div>';
+                return;
+            }
+
+            weeks.sort((a, b) => (a.week || 0) - (b.week || 0));
+
+            list.innerHTML = weeks.map((wk, i) => {
+                const block = (cls, label, items) => (items && items.length) ? `
+                    <div class="week-block ${cls}">
+                        <h4>${label}</h4>
+                        <ul>${items.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
+                    </div>` : '';
+                return `
+                    <details class="card week-entry"${i === weeks.length - 1 ? ' open' : ''}>
+                        <summary>
+                            <span class="week-badge">Week ${escapeHtml(String(wk.week ?? i + 1))}</span>
+                            <span class="week-title">${escapeHtml(wk.title || '')}</span>
+                            <span class="week-date">${escapeHtml(wk.date || '')}</span>
+                            <span class="week-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                        </summary>
+                        <div class="week-body">
+                            ${block('goals', 'Goals', wk.goals)}
+                            ${block('approach', 'Approach & Implementation', wk.approach)}
+                            ${block('results', 'Results', wk.results)}
+                            ${block('notes', 'Notes', wk.notes)}
+                        </div>
+                    </details>
+                `;
+            }).join('');
+        }
+
+        function renderReports(reports) {
+            const list = document.getElementById('report-list');
+            reportsCache = reports;
+            if (reports.length === 0) {
+                list.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">No reports yet. Drop a PDF into the <code>dreu/</code> folder and add an entry to the <code>reports</code> array in <code>dreu/dreu.json</code>.</div>';
+                return;
+            }
+
+            reportsCache.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+            list.innerHTML = reportsCache.map((r, i) => {
+                const tags = (r.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+                const meta = [r.date].filter(Boolean).map(x => `<span>${escapeHtml(x)}</span>`).join('');
+                return `
+                    <a class="post-card" href="#" onclick="openViewer(${i}); return false;">
+                        <div class="post-card-meta">${meta}</div>
+                        <div class="post-card-title">${escapeHtml(r.title)}</div>
+                        <div class="post-card-summary">${escapeHtml(r.summary || '')}</div>
+                        <div class="post-card-tags">${tags}</div>
+                    </a>
+                `;
+            }).join('');
+
+            // If URL has ?report=filename.pdf, open it directly
+            const params = new URLSearchParams(window.location.search);
+            const requested = params.get('report');
+            if (requested) {
+                const idx = reportsCache.findIndex(r => r.file === requested);
+                if (idx >= 0) openViewer(idx);
+            }
+        }
+
+        function renderUpdates(updates) {
+            const list = document.getElementById('update-list');
+            if (updates.length === 0) {
+                list.innerHTML = '<div class="empty-state">No extra updates yet. Add entries to the <code>updates</code> array in <code>dreu/dreu.json</code>.</div>';
+                return;
+            }
+
+            updates.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+            list.innerHTML = updates.map(u => `
+                <div class="update-item">
+                    <div class="update-date">${escapeHtml(u.date || '')}</div>
+                    <div class="update-title">${escapeHtml(u.title || '')}</div>
+                    <div class="update-body">${escapeHtml(u.body || '')}</div>
+                </div>
+            `).join('');
+        }
+
+        function openViewer(index) {
+            const report = reportsCache[index];
+            if (!report) return;
+            const url = '/dreu/' + report.file;
+            document.getElementById('viewer-title').textContent = report.title;
+            document.getElementById('viewer-frame').src = url;
+            document.getElementById('viewer-download').href = url;
+            document.getElementById('viewer-download').setAttribute('download', report.file);
+            const wrap = document.getElementById('viewer-wrap');
+            wrap.style.display = 'block';
+            wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            const params = new URLSearchParams(window.location.search);
+            params.set('report', report.file);
+            history.replaceState(null, '', '?' + params.toString());
+        }
+
+        function closeViewer() {
+            const wrap = document.getElementById('viewer-wrap');
+            wrap.style.display = 'none';
+            document.getElementById('viewer-frame').src = '';
+            history.replaceState(null, '', window.location.pathname);
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+    </script>
+</body>
+</html>

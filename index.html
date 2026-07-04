@@ -11,7 +11,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -23,6 +23,7 @@
                     <li><a href="/">About</a></li>
                     <li><a href="/experience/">Experience</a></li>
                     <li><a href="/projects/">Projects</a></li>
+                    <li><a href="/dreu/">DREU</a></li>
                     <li><a href="/blog/">Blog</a></li>
                     <li><a href="/notes/">Notes</a></li>
                     <li><a href="/handouts/">Handouts</a></li>
@@ -36,8 +37,16 @@
     </nav>
 
     <section class="hero" id="about">
+        <div class="hero-atom" aria-hidden="true">
+            <div class="orbit orbit-1"><span class="electron"></span></div>
+            <div class="orbit orbit-2"><span class="electron"></span></div>
+            <div class="orbit orbit-3"><span class="electron"></span></div>
+            <div class="nucleus"></div>
+        </div>
+
         <p class="eyebrow">CS @ UT Austin</p>
-        <h1 class="hero-title">Hi, I'm Cosmo Wu.</h1>
+        <h1 class="hero-title">Hi, I'm <span class="gradient-text">Cosmo Wu</span>.</h1>
+        <p class="hero-rotator">exploring <span class="rotate-word" data-rotate='["robot learning","quantum computing","multi-agent AI","embedded systems","hardware optimization"]'></span><span class="caret"></span></p>
         <p class="hero-bio">
             I'm a student at UT studying Computer Science. I'm interested in a variety of subjects, including
             frontier robotics, quantum devices, and hardware/software optimizations.
@@ -67,18 +76,23 @@
                 <div class="post-card-title">Projects</div>
                 <div class="post-card-summary">Selected personal and academic builds.</div>
             </a>
+            <a href="/dreu/" class="post-card">
+                <div class="post-card-meta"><span>03</span><span>Summer 2026</span></div>
+                <div class="post-card-title">DREU Research Journal</div>
+                <div class="post-card-summary">Weekly logs and reports from my Quantum AI research at Kansas State University.</div>
+            </a>
             <a href="/blog/" class="post-card">
-                <div class="post-card-meta"><span>03</span></div>
+                <div class="post-card-meta"><span>04</span></div>
                 <div class="post-card-title">Blog</div>
                 <div class="post-card-summary">Writing about what I'm learning and building.</div>
             </a>
             <a href="/notes/" class="post-card">
-                <div class="post-card-meta"><span>04</span></div>
+                <div class="post-card-meta"><span>05</span></div>
                 <div class="post-card-title">Notes</div>
                 <div class="post-card-summary">Course notes and reference PDFs.</div>
             </a>
             <a href="/handouts/" class="post-card">
-                <div class="post-card-meta"><span>05</span></div>
+                <div class="post-card-meta"><span>06</span></div>
                 <div class="post-card-title">Handouts</div>
                 <div class="post-card-summary">Problem sets and worksheets I've written.</div>
             </a>
