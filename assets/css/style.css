@@ -18,22 +18,22 @@ html {
    Quantum / deep-space palette: cyan → violet → pink
    ========================================================= */
 :root {
-    --bg:           #f6f8fc;
+    --bg:           #f2f6f7;
     --bg-elevated:  #ffffff;
     --surface:      #ffffff;
-    --surface-soft: #eef2f9;
-    --border:       #dde4f0;
-    --border-soft:  #e8edf6;
+    --surface-soft: #e9f0f1;
+    --border:       #d8e2e4;
+    --border-soft:  #e4ebed;
 
-    --text:         #101423;
-    --text-muted:   #4b5268;
-    --text-subtle:  #858c9f;
+    --text:         #0c1524;
+    --text-muted:   #47546b;
+    --text-subtle:  #7f8b9f;
 
-    --primary:      #0e7490;   /* deep cyan */
-    --primary-soft: #e0f5fa;
-    --secondary:    #6d28d9;   /* violet */
-    --accent:       #db2777;   /* pink */
-    --glow:         rgba(14, 116, 144, 0.18);
+    --primary:      #0a8a72;   /* phosphor teal — coherent evolution */
+    --primary-soft: #ddf3ec;
+    --secondary:    #3b62c4;   /* ice blue — starlight */
+    --accent:       #c22869;   /* measurement magenta — collapsed results */
+    --glow:         rgba(10, 138, 114, 0.18);
 
     --shadow-sm: 0 1px 2px rgba(16, 24, 60, 0.05);
     --shadow-md: 0 4px 18px rgba(16, 24, 60, 0.08);
@@ -48,50 +48,48 @@ html {
 
     --grid-line:    rgba(30, 60, 140, 0.05);
     --star-opacity: 0.55;
-    --aurora-opacity: 0.35;
 
     --radius-sm:    8px;
     --radius:       14px;
     --radius-lg:    20px;
 
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
-    --font-serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Chakra Petch', 'IBM Plex Sans', -apple-system, sans-serif;
+    --font-serif: 'Iowan Old Style', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 [data-theme="dark"] {
-    --bg:           #05070f;
-    --bg-elevated:  #0a0e1c;
-    --surface:      #0c1122;
-    --surface-soft: #131a30;
-    --border:       rgba(148, 163, 255, 0.13);
-    --border-soft:  rgba(148, 163, 255, 0.07);
+    --bg:           #04070d;
+    --bg-elevated:  #090e18;
+    --surface:      #0b111c;
+    --surface-soft: #121a29;
+    --border:       rgba(143, 184, 255, 0.14);
+    --border-soft:  rgba(143, 184, 255, 0.07);
 
-    --text:         #eef2fb;
-    --text-muted:   #a7b0c8;
-    --text-subtle:  #66708c;
+    --text:         #e9f0f7;
+    --text-muted:   #9facc2;
+    --text-subtle:  #5e6b84;
 
-    --primary:      #6ee7f9;   /* bright cyan */
-    --primary-soft: rgba(110, 231, 249, 0.1);
-    --secondary:    #a78bfa;   /* soft violet */
-    --accent:       #f472b6;   /* pink */
-    --glow:         rgba(110, 231, 249, 0.28);
+    --primary:      #5ff2d3;   /* phosphor teal — coherent evolution */
+    --primary-soft: rgba(95, 242, 211, 0.1);
+    --secondary:    #8fb8ff;   /* ice blue — starlight */
+    --accent:       #ff5c9e;   /* measurement magenta — collapsed results */
+    --glow:         rgba(95, 242, 211, 0.25);
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
     --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.45);
     --shadow-lg: 0 24px 70px rgba(0, 0, 0, 0.6);
 
-    --nav-bg:       rgba(5, 7, 15, 0.72);
-    --nav-border:   rgba(148, 163, 255, 0.1);
+    --nav-bg:       rgba(4, 7, 13, 0.72);
+    --nav-border:   rgba(143, 184, 255, 0.1);
 
-    --code-bg:      rgba(148, 163, 255, 0.1);
-    --pre-bg:       #070b18;
+    --code-bg:      rgba(143, 184, 255, 0.1);
+    --pre-bg:       #060b14;
     --pre-text:     #dbe3f5;
 
-    --grid-line:    rgba(148, 163, 255, 0.045);
+    --grid-line:    rgba(143, 184, 255, 0.045);
     --star-opacity: 1;
-    --aurora-opacity: 0.5;
 }
 
 /* =========================================================
@@ -120,45 +118,6 @@ body::before {
         radial-gradient(900px 600px at -10% 5%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 60%),
         radial-gradient(700px 500px at 50% 110%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);
     pointer-events: none;
-}
-
-/* Aurora blobs — slow drifting color fields (injected by main.js) */
-.aurora {
-    position: fixed;
-    z-index: -3;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: var(--aurora-opacity);
-    pointer-events: none;
-    will-change: transform;
-}
-
-.aurora-1 {
-    width: 55vw;
-    height: 55vw;
-    top: -20vw;
-    right: -14vw;
-    background: radial-gradient(circle, color-mix(in srgb, var(--secondary) 34%, transparent), transparent 65%);
-    animation: aurora-drift-1 26s ease-in-out infinite alternate;
-}
-
-.aurora-2 {
-    width: 48vw;
-    height: 48vw;
-    bottom: -18vw;
-    left: -14vw;
-    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 30%, transparent), transparent 65%);
-    animation: aurora-drift-2 32s ease-in-out infinite alternate;
-}
-
-@keyframes aurora-drift-1 {
-    from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(-10vw, 14vh) scale(1.25); }
-}
-
-@keyframes aurora-drift-2 {
-    from { transform: translate(0, 0) scale(1.15); }
-    to   { transform: translate(12vw, -12vh) scale(0.95); }
 }
 
 /* Faint blueprint grid, faded toward the edges */
@@ -199,7 +158,7 @@ body::after {
     height: 2px;
     width: 100%;
     z-index: 2000;
-    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
     transform-origin: 0 50%;
     transform: scaleX(0);
     pointer-events: none;
@@ -241,10 +200,7 @@ body::after {
 }
 
 .logo .logo-dot {
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--primary);
 }
 
 .nav-right {
@@ -277,7 +233,7 @@ body::after {
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
+    background: var(--primary);
     border-radius: 2px;
     transform: scaleX(0);
     transform-origin: 0 50%;
@@ -352,81 +308,77 @@ section {
 }
 
 /* =========================================================
-   Hero atom — orbiting electrons behind the title
+   Hero circuit — qubit wires with gates behind the title.
+   The site's signature: his research is circuit discovery.
    ========================================================= */
-.hero-atom {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: min(680px, 92vw);
-    aspect-ratio: 1;
-    transform: translate(-50%, -54%);
-    pointer-events: none;
-    z-index: -1;
-}
-
-.hero-atom .orbit {
+.hero-circuit {
     position: absolute;
     inset: 0;
-    border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
-    animation: orbit-spin linear infinite;
+    z-index: -1;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 21vh;
+    padding: 0 1rem;
 }
 
-.hero-atom .orbit-1 { inset: 6%;  animation-duration: 18s; border-color: color-mix(in srgb, var(--primary) 38%, transparent); }
-.hero-atom .orbit-2 { inset: 18%; animation-duration: 28s; animation-direction: reverse; border-color: color-mix(in srgb, var(--secondary) 34%, transparent); }
-.hero-atom .orbit-3 { inset: 31%; animation-duration: 40s; border-color: color-mix(in srgb, var(--accent) 28%, transparent); }
-
-.hero-atom .electron {
-    position: absolute;
-    top: -5px;
-    left: 50%;
-    width: 10px;
-    height: 10px;
-    margin-left: -5px;
-    border-radius: 50%;
-    background: var(--primary);
-    box-shadow: 0 0 16px 3px var(--glow);
+.qwire {
+    position: relative;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent,
+        color-mix(in srgb, var(--secondary) 32%, transparent) 12%,
+        color-mix(in srgb, var(--secondary) 32%, transparent) 88%,
+        transparent);
 }
 
-/* second, smaller electron on the opposite side of each orbit */
-.hero-atom .orbit::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 50%;
-    width: 6px;
-    height: 6px;
-    margin-left: -3px;
-    border-radius: 50%;
-    background: currentColor;
-    color: var(--text-subtle);
-    opacity: 0.8;
-}
-
-.hero-atom .orbit-2 .electron { background: var(--secondary); box-shadow: 0 0 12px 2px color-mix(in srgb, var(--secondary) 40%, transparent); }
-.hero-atom .orbit-3 .electron { background: var(--accent);    box-shadow: 0 0 12px 2px color-mix(in srgb, var(--accent) 40%, transparent); }
-
-.hero-atom .nucleus {
+/* gate boxes sitting on the wires */
+.qwire .qgate {
     position: absolute;
     top: 50%;
-    left: 50%;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
     transform: translate(-50%, -50%);
-    background: color-mix(in srgb, var(--primary) 60%, transparent);
-    box-shadow: 0 0 30px 8px var(--glow);
-    animation: nucleus-pulse 4s ease-in-out infinite;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 6px;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--text-subtle);
+    background: var(--bg);
+    border: 1px solid color-mix(in srgb, var(--secondary) 42%, transparent);
+    border-radius: 5px;
 }
 
-@keyframes orbit-spin {
-    to { transform: rotate(360deg); }
+/* measurement gates collapse the state - they read magenta */
+.qwire .qgate.measure {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
 }
 
-@keyframes nucleus-pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1);   opacity: 0.9; }
-    50%      { transform: translate(-50%, -50%) scale(1.5); opacity: 0.55; }
+/* a pulse of amplitude traveling down each wire */
+.qwire .qpulse {
+    position: absolute;
+    top: -2.5px;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 14px 3px var(--glow);
+    animation: qtravel 9s linear infinite;
+}
+
+.qwire:nth-child(2) .qpulse { animation-delay: -3s; animation-duration: 11s; }
+.qwire:nth-child(3) .qpulse { animation-delay: -6s; animation-duration: 13s; }
+
+@keyframes qtravel {
+    0%   { left: 0%;   opacity: 0; }
+    6%   { opacity: 1; }
+    94%  { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
 }
 
 /* =========================================================
@@ -456,17 +408,17 @@ h1, h2, h3, h4 {
 
 .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    font-weight: 600;
-    margin-bottom: 1.1rem;
+    font-size: clamp(2.7rem, 7vw, 5rem);
+    font-weight: 700;
+    margin-bottom: 1.2rem;
     color: var(--text);
-    letter-spacing: -0.035em;
-    line-height: 1.02;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
     animation: fadeInUp 0.9s ease;
 }
 
 .gradient-text {
-    background: linear-gradient(100deg, var(--primary) 0%, var(--secondary) 55%, var(--accent) 100%);
+    background: linear-gradient(100deg, var(--primary) 0%, var(--secondary) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -474,11 +426,48 @@ h1, h2, h3, h4 {
 
 .hero-rotator {
     font-family: var(--font-mono);
-    font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
     color: var(--text-muted);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.6rem;
     animation: fadeInUp 0.9s ease 0.1s backwards;
-    min-height: 1.7em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    max-width: 100%;
+}
+
+/* input state |ψ₀⟩ … measured output |Cosmo⟩ */
+.hero-rotator .ket {
+    color: var(--text-subtle);
+    white-space: nowrap;
+}
+
+.hero-rotator .ket-out {
+    color: var(--accent);
+}
+
+.hero-rotator .wire-seg {
+    display: inline-block;
+    width: clamp(1.2rem, 5vw, 3rem);
+    height: 1px;
+    background: color-mix(in srgb, var(--secondary) 45%, transparent);
+    flex-shrink: 1;
+}
+
+/* the rotating interest is a gate applied to the state */
+.hero-rotator .gate-box {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.32em 0.75em;
+    border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
+    border-radius: 6px;
+    background: var(--primary-soft);
+    box-shadow: 0 0 18px -6px var(--glow);
+    min-width: 13ch;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 .hero-rotator .rotate-word {
@@ -573,11 +562,11 @@ h1, h2, h3, h4 {
 
 .section-title {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: var(--text);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.01em;
 }
 
 /* Ket notation |Title⟩ — the site's quantum signature */
@@ -760,9 +749,8 @@ h1, h2, h3, h4 {
     background:
         linear-gradient(var(--surface), var(--surface)) padding-box,
         linear-gradient(120deg,
-            color-mix(in srgb, var(--primary) 55%, transparent),
-            color-mix(in srgb, var(--secondary) 45%, transparent),
-            color-mix(in srgb, var(--accent) 40%, transparent)) border-box;
+            color-mix(in srgb, var(--primary) 60%, transparent),
+            color-mix(in srgb, var(--secondary) 45%, transparent)) border-box;
     border: 1px solid transparent;
 }
 
@@ -1203,7 +1191,7 @@ h1, h2, h3, h4 {
     top: 8px;
     bottom: 8px;
     width: 2px;
-    background: linear-gradient(180deg, var(--primary), var(--secondary) 55%, var(--accent));
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
     opacity: 0.35;
     border-radius: 2px;
 }
@@ -1571,21 +1559,11 @@ details.week-entry.card {
     border-radius: var(--radius) var(--radius) 0 0;
 }
 
-.term-dots {
-    display: flex;
-    gap: 5px;
+.term-prompt {
+    color: var(--primary);
     flex-shrink: 0;
+    font-weight: 500;
 }
-
-.term-dots i {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-}
-
-.term-dots i:nth-child(1) { background: #ff5f57; }
-.term-dots i:nth-child(2) { background: #febc2e; }
-.term-dots i:nth-child(3) { background: #28c840; }
 
 .term-path {
     flex: 1;
@@ -1593,6 +1571,23 @@ details.week-entry.card {
     text-overflow: ellipsis;
     white-space: nowrap;
     letter-spacing: 0.02em;
+}
+
+/* block cursor appears in the prompt when the card is hovered */
+.term-path::after {
+    content: '';
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.35em;
+    vertical-align: text-bottom;
+    background: var(--primary);
+    opacity: 0;
+}
+
+.project-card:hover .term-path::after {
+    opacity: 1;
+    animation: caret-blink 1s steps(1) infinite;
 }
 
 .term-ext {

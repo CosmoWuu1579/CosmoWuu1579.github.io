@@ -1,23 +1,10 @@
 // ============================================================
 // Cosmo Wu — site-wide JS
-// Constellation background, aurora, robot companion, scroll
-// progress, card spotlight, reveal animations, theme toggle.
+// Constellation background, robot companion, scroll progress,
+// card spotlight, reveal animations, theme toggle.
 // ============================================================
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-// ------------------------------------------------------------
-// Aurora blobs — slow drifting color fields behind everything
-// ------------------------------------------------------------
-(function () {
-    const a1 = document.createElement('div');
-    const a2 = document.createElement('div');
-    a1.className = 'aurora aurora-1';
-    a2.className = 'aurora aurora-2';
-    a1.setAttribute('aria-hidden', 'true');
-    a2.setAttribute('aria-hidden', 'true');
-    document.body.prepend(a1, a2);
-})();
 
 // ------------------------------------------------------------
 // Constellation — drifting particles linked into a living network,
@@ -49,11 +36,11 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
         return document.documentElement.getAttribute('data-theme') === 'dark';
     }
 
-    // [r,g,b] palettes — dark gets icy star tones, light gets deep ink tones
+    // [r,g,b] palettes — phosphor teal + ice blue, with rare magenta stars
     function palette() {
         return isDark()
-            ? { dots: [[165, 240, 255], [190, 172, 255], [246, 170, 220], [235, 240, 255]], line: '150,205,255', mouse: '125,231,249', dotBoost: 1 }
-            : { dots: [[20, 95, 165], [98, 60, 200], [190, 45, 125], [55, 80, 150]], line: '55,85,175', mouse: '14,116,144', dotBoost: 0.9 };
+            ? { dots: [[95, 242, 211], [143, 184, 255], [255, 92, 158], [230, 240, 250]], line: '143,184,255', mouse: '95,242,211', dotBoost: 1 }
+            : { dots: [[10, 138, 114], [59, 98, 196], [178, 40, 105], [60, 80, 120]], line: '59,98,196', mouse: '10,138,114', dotBoost: 0.9 };
     }
 
     function resize() {
@@ -79,7 +66,8 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
             depth: Math.random() * 0.7 + 0.3,
             phase: Math.random() * Math.PI * 2,
             speed: Math.random() * 0.9 + 0.4,
-            c: Math.floor(Math.random() * 4)
+            // weighted: mostly teal/ice/white, magenta stars are rare
+            c: (r => r < 0.38 ? 0 : r < 0.72 ? 1 : r < 0.82 ? 2 : 3)(Math.random())
         }));
     }
 
