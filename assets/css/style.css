@@ -47,7 +47,8 @@ html {
     --pre-text:     #e6ecf8;
 
     --grid-line:    rgba(30, 60, 140, 0.05);
-    --star-opacity: 0.35;
+    --star-opacity: 0.55;
+    --aurora-opacity: 0.35;
 
     --radius-sm:    8px;
     --radius:       14px;
@@ -90,6 +91,7 @@ html {
 
     --grid-line:    rgba(148, 163, 255, 0.045);
     --star-opacity: 1;
+    --aurora-opacity: 0.5;
 }
 
 /* =========================================================
@@ -112,12 +114,51 @@ body::before {
     content: '';
     position: fixed;
     inset: 0;
-    z-index: -3;
+    z-index: -4;
     background:
-        radial-gradient(1100px 700px at 85% -10%, color-mix(in srgb, var(--secondary) 10%, transparent), transparent 62%),
-        radial-gradient(900px 600px at -10% 5%, color-mix(in srgb, var(--primary) 9%, transparent), transparent 60%),
-        radial-gradient(700px 500px at 50% 110%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 60%);
+        radial-gradient(1100px 700px at 85% -10%, color-mix(in srgb, var(--secondary) 14%, transparent), transparent 62%),
+        radial-gradient(900px 600px at -10% 5%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 60%),
+        radial-gradient(700px 500px at 50% 110%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);
     pointer-events: none;
+}
+
+/* Aurora blobs — slow drifting color fields (injected by main.js) */
+.aurora {
+    position: fixed;
+    z-index: -3;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: var(--aurora-opacity);
+    pointer-events: none;
+    will-change: transform;
+}
+
+.aurora-1 {
+    width: 55vw;
+    height: 55vw;
+    top: -20vw;
+    right: -14vw;
+    background: radial-gradient(circle, color-mix(in srgb, var(--secondary) 34%, transparent), transparent 65%);
+    animation: aurora-drift-1 26s ease-in-out infinite alternate;
+}
+
+.aurora-2 {
+    width: 48vw;
+    height: 48vw;
+    bottom: -18vw;
+    left: -14vw;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 30%, transparent), transparent 65%);
+    animation: aurora-drift-2 32s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift-1 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-10vw, 14vh) scale(1.25); }
+}
+
+@keyframes aurora-drift-2 {
+    from { transform: translate(0, 0) scale(1.15); }
+    to   { transform: translate(12vw, -12vh) scale(0.95); }
 }
 
 /* Faint blueprint grid, faded toward the edges */
@@ -317,36 +358,50 @@ section {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: min(620px, 90vw);
+    width: min(680px, 92vw);
     aspect-ratio: 1;
     transform: translate(-50%, -54%);
     pointer-events: none;
     z-index: -1;
-    opacity: 0.75;
 }
 
 .hero-atom .orbit {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
     animation: orbit-spin linear infinite;
 }
 
-.hero-atom .orbit-1 { inset: 6%;  animation-duration: 26s; border-color: color-mix(in srgb, var(--primary) 22%, transparent); }
-.hero-atom .orbit-2 { inset: 18%; animation-duration: 38s; animation-direction: reverse; border-color: color-mix(in srgb, var(--secondary) 20%, transparent); }
-.hero-atom .orbit-3 { inset: 31%; animation-duration: 52s; border-color: color-mix(in srgb, var(--accent) 16%, transparent); }
+.hero-atom .orbit-1 { inset: 6%;  animation-duration: 18s; border-color: color-mix(in srgb, var(--primary) 38%, transparent); }
+.hero-atom .orbit-2 { inset: 18%; animation-duration: 28s; animation-direction: reverse; border-color: color-mix(in srgb, var(--secondary) 34%, transparent); }
+.hero-atom .orbit-3 { inset: 31%; animation-duration: 40s; border-color: color-mix(in srgb, var(--accent) 28%, transparent); }
 
 .hero-atom .electron {
     position: absolute;
-    top: -4px;
+    top: -5px;
     left: 50%;
-    width: 8px;
-    height: 8px;
-    margin-left: -4px;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
     border-radius: 50%;
     background: var(--primary);
-    box-shadow: 0 0 12px 2px var(--glow);
+    box-shadow: 0 0 16px 3px var(--glow);
+}
+
+/* second, smaller electron on the opposite side of each orbit */
+.hero-atom .orbit::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    margin-left: -3px;
+    border-radius: 50%;
+    background: currentColor;
+    color: var(--text-subtle);
+    opacity: 0.8;
 }
 
 .hero-atom .orbit-2 .electron { background: var(--secondary); box-shadow: 0 0 12px 2px color-mix(in srgb, var(--secondary) 40%, transparent); }
@@ -523,6 +578,25 @@ h1, h2, h3, h4 {
     margin-bottom: 0.5rem;
     color: var(--text);
     letter-spacing: -0.03em;
+}
+
+/* Ket notation |Title⟩ — the site's quantum signature */
+.section-title::before {
+    content: '|';
+    font-family: var(--font-mono);
+    font-weight: 400;
+    color: var(--primary);
+    opacity: 0.65;
+    margin-right: 0.08em;
+}
+
+.section-title::after {
+    content: '⟩';
+    font-family: var(--font-mono);
+    font-weight: 400;
+    color: var(--accent);
+    opacity: 0.65;
+    margin-left: 0.08em;
 }
 
 .section-subtitle {
@@ -1325,6 +1399,250 @@ details.week-entry.card {
     color: var(--text-muted);
     font-size: 0.94rem;
     line-height: 1.65;
+}
+
+/* =========================================================
+   Robot companion (injected by main.js)
+   ========================================================= */
+.robo-buddy {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    width: 72px;
+    z-index: 900;
+    pointer-events: none;
+    animation: robo-bob 4.2s ease-in-out infinite;
+    filter: drop-shadow(0 10px 18px var(--glow));
+}
+
+.robo-antenna {
+    width: 2px;
+    height: 12px;
+    margin: 0 auto;
+    background: var(--text-subtle);
+    position: relative;
+}
+
+.robo-antenna-tip {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px 2px color-mix(in srgb, var(--accent) 55%, transparent);
+    animation: tip-pulse 2.2s ease-in-out infinite;
+}
+
+.robo-head {
+    width: 54px;
+    height: 38px;
+    margin: 0 auto;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px 14px 9px 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.robo-eye {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--glow);
+    transform: translate(var(--eye-x, 0), var(--eye-y, 0));
+    animation: robo-blink 5.5s infinite;
+}
+
+.robo-mouth {
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--text-subtle);
+    opacity: 0.7;
+}
+
+.robo-body {
+    width: 42px;
+    height: 20px;
+    margin: 3px auto 0;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.robo-chest {
+    position: absolute;
+    inset: 5px 11px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+    background-size: 300% 100%;
+    opacity: 0.6;
+    animation: chest-scan 3.5s linear infinite;
+}
+
+.robo-thruster {
+    width: 22px;
+    height: 8px;
+    margin: 2px auto 0;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--primary) 70%, transparent), transparent 70%);
+    filter: blur(1.5px);
+    animation: thruster-flicker 0.9s ease-in-out infinite;
+}
+
+@keyframes robo-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-9px); }
+}
+
+@keyframes robo-blink {
+    0%, 91%, 96%, 100% { transform: translate(var(--eye-x, 0), var(--eye-y, 0)) scaleY(1); }
+    93.5%              { transform: translate(var(--eye-x, 0), var(--eye-y, 0)) scaleY(0.08); }
+}
+
+@keyframes tip-pulse {
+    0%, 100% { opacity: 1;   transform: translateX(-50%) scale(1); }
+    50%      { opacity: 0.4; transform: translateX(-50%) scale(0.75); }
+}
+
+@keyframes chest-scan {
+    to { background-position: 300% 0; }
+}
+
+@keyframes thruster-flicker {
+    0%, 100% { opacity: 0.85; transform: scaleX(1); }
+    50%      { opacity: 0.45; transform: scaleX(0.75); }
+}
+
+@media (max-width: 900px) {
+    .robo-buddy { display: none; }
+}
+
+/* =========================================================
+   Project cards — terminal-window style
+   ========================================================= */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.1rem;
+}
+
+.project-grid .card {
+    margin-bottom: 0;
+}
+
+.project-card {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-card.featured {
+    grid-column: 1 / -1;
+}
+
+.term-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.1rem;
+    border-bottom: 1px solid var(--border-soft);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-subtle);
+    background: color-mix(in srgb, var(--surface-soft) 65%, transparent);
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.term-dots {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.term-dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.term-dots i:nth-child(1) { background: #ff5f57; }
+.term-dots i:nth-child(2) { background: #febc2e; }
+.term-dots i:nth-child(3) { background: #28c840; }
+
+.term-path {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.term-ext {
+    flex-shrink: 0;
+    font-size: 0.95rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.project-card:hover .term-ext {
+    color: var(--primary);
+    transform: translate(2px, -2px);
+}
+
+.project-card-body {
+    padding: 1.3rem 1.5rem 1.5rem;
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card-body .card-blurb {
+    margin-top: 0.6rem;
+    flex-grow: 1;
+}
+
+.project-card-body .skill-tags {
+    margin-top: 1.1rem;
+}
+
+/* Giant outlined index number in the corner */
+.project-index {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.35rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 3.4rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--text-subtle) 40%, transparent);
+    opacity: 0.55;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.3s ease, -webkit-text-stroke-color 0.3s ease;
+}
+
+.project-card:hover .project-index {
+    opacity: 1;
+    -webkit-text-stroke-color: color-mix(in srgb, var(--primary) 65%, transparent);
 }
 
 /* =========================================================

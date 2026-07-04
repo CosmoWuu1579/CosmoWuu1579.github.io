@@ -1,13 +1,27 @@
 // ============================================================
 // Cosmo Wu — site-wide JS
-// Starfield, scroll progress, card spotlight, reveal animations,
-// theme toggle, nav helpers.
+// Constellation background, aurora, robot companion, scroll
+// progress, card spotlight, reveal animations, theme toggle.
 // ============================================================
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ------------------------------------------------------------
-// Starfield — twinkling stars with mouse parallax + shooting stars
+// Aurora blobs — slow drifting color fields behind everything
+// ------------------------------------------------------------
+(function () {
+    const a1 = document.createElement('div');
+    const a2 = document.createElement('div');
+    a1.className = 'aurora aurora-1';
+    a2.className = 'aurora aurora-2';
+    a1.setAttribute('aria-hidden', 'true');
+    a2.setAttribute('aria-hidden', 'true');
+    document.body.prepend(a1, a2);
+})();
+
+// ------------------------------------------------------------
+// Constellation — drifting particles linked into a living network,
+// with twinkle, cursor-linking, parallax and shooting stars.
 // ------------------------------------------------------------
 (function () {
     if (prefersReducedMotion) return;
@@ -18,12 +32,29 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
     document.body.prepend(canvas);
 
     const ctx = canvas.getContext('2d');
-    let stars = [];
+    const LINK_DIST = 130;
+    const MOUSE_DIST = 190;
+
+    let particles = [];
     let shooting = [];
     let w = 0, h = 0;
-    let mouseX = 0, mouseY = 0;      // -0.5 … 0.5, eased
-    let targetX = 0, targetY = 0;
+    let mx = -9999, my = -9999;          // cursor position (canvas coords)
+    let px = 0, py = 0;                  // eased parallax (-0.5 … 0.5)
+    let tx = 0, ty = 0;
     let running = true;
+    let t = 0;
+    let lastShoot = 0;
+
+    function isDark() {
+        return document.documentElement.getAttribute('data-theme') === 'dark';
+    }
+
+    // [r,g,b] palettes — dark gets icy star tones, light gets deep ink tones
+    function palette() {
+        return isDark()
+            ? { dots: [[165, 240, 255], [190, 172, 255], [246, 170, 220], [235, 240, 255]], line: '150,205,255', mouse: '125,231,249', dotBoost: 1 }
+            : { dots: [[20, 95, 165], [98, 60, 200], [190, 45, 125], [55, 80, 150]], line: '55,85,175', mouse: '14,116,144', dotBoost: 0.9 };
+    }
 
     function resize() {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -38,22 +69,18 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
     }
 
     function seed() {
-        const count = Math.min(220, Math.floor((w * h) / 6500));
-        stars = Array.from({ length: count }, () => ({
+        const count = Math.max(70, Math.min(150, Math.floor((w * h) / 11000)));
+        particles = Array.from({ length: count }, () => ({
             x: Math.random() * w,
             y: Math.random() * h,
-            r: Math.random() * 1.3 + 0.3,
-            depth: Math.random() * 0.9 + 0.1,          // parallax layer
-            phase: Math.random() * Math.PI * 2,        // twinkle offset
-            speed: Math.random() * 0.9 + 0.4,          // twinkle speed
-            hue: Math.random() < 0.12 ? 'accent' : (Math.random() < 0.3 ? 'cyan' : 'white')
+            vx: (Math.random() - 0.5) * 0.28,
+            vy: (Math.random() - 0.5) * 0.28,
+            r: Math.random() * 1.5 + 0.8,
+            depth: Math.random() * 0.7 + 0.3,
+            phase: Math.random() * Math.PI * 2,
+            speed: Math.random() * 0.9 + 0.4,
+            c: Math.floor(Math.random() * 4)
         }));
-    }
-
-    function starColor(hue, alpha) {
-        if (hue === 'cyan')   return `rgba(140, 235, 250, ${alpha})`;
-        if (hue === 'accent') return `rgba(196, 165, 250, ${alpha})`;
-        return `rgba(230, 236, 250, ${alpha})`;
     }
 
     function spawnShootingStar() {
@@ -66,51 +93,88 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
         });
     }
 
-    let t = 0;
-    let lastShoot = 0;
-
     function frame(now) {
         if (!running) return;
         t += 0.016;
+        const pal = palette();
         ctx.clearRect(0, 0, w, h);
 
-        mouseX += (targetX - mouseX) * 0.04;
-        mouseY += (targetY - mouseY) * 0.04;
+        px += (tx - px) * 0.04;
+        py += (ty - py) * 0.04;
 
-        for (const s of stars) {
-            const tw = 0.55 + 0.45 * Math.sin(t * s.speed + s.phase);
-            const px = s.x + mouseX * 30 * s.depth;
-            const py = s.y + mouseY * 30 * s.depth;
+        // move + draw particles
+        for (const p of particles) {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < -20) p.x = w + 20; else if (p.x > w + 20) p.x = -20;
+            if (p.y < -20) p.y = h + 20; else if (p.y > h + 20) p.y = -20;
+
+            const tw = 0.55 + 0.45 * Math.sin(t * p.speed + p.phase);
+            const [r, g, b] = pal.dots[p.c];
+            const dx = p.x + px * 26 * p.depth;
+            const dy = p.y + py * 26 * p.depth;
             ctx.beginPath();
-            ctx.arc(px, py, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = starColor(s.hue, (0.25 + 0.6 * tw) * s.depth);
+            ctx.arc(dx, dy, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${r},${g},${b},${(0.35 + 0.55 * tw) * p.depth * pal.dotBoost})`;
             ctx.fill();
         }
 
-        // Occasional shooting star (dark theme reads best, but harmless in light)
-        if (now - lastShoot > 6000 && Math.random() < 0.01) {
-            spawnShootingStar();
-            lastShoot = now;
+        // link nearby particles into constellations
+        for (let i = 0; i < particles.length; i++) {
+            const a = particles[i];
+            for (let j = i + 1; j < particles.length; j++) {
+                const b = particles[j];
+                const dx = a.x - b.x, dy = a.y - b.y;
+                const d2 = dx * dx + dy * dy;
+                if (d2 < LINK_DIST * LINK_DIST) {
+                    const alpha = (1 - Math.sqrt(d2) / LINK_DIST) * 0.22;
+                    ctx.strokeStyle = `rgba(${pal.line},${alpha})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                }
+            }
+            // link to cursor — the network reaches toward you
+            const dxm = a.x - mx, dym = a.y - my;
+            const dm2 = dxm * dxm + dym * dym;
+            if (dm2 < MOUSE_DIST * MOUSE_DIST) {
+                const alpha = (1 - Math.sqrt(dm2) / MOUSE_DIST) * 0.5;
+                ctx.strokeStyle = `rgba(${pal.mouse},${alpha})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(mx, my);
+                ctx.stroke();
+            }
         }
 
-        for (let i = shooting.length - 1; i >= 0; i--) {
-            const m = shooting[i];
-            m.x += m.vx;
-            m.y += m.vy;
-            m.life -= 0.018;
-            if (m.life <= 0 || m.x < -80 || m.y > h + 80) {
-                shooting.splice(i, 1);
-                continue;
+        // shooting stars (dark theme only — they read as meteors)
+        if (isDark()) {
+            if (now - lastShoot > 5000 && Math.random() < 0.012) {
+                spawnShootingStar();
+                lastShoot = now;
             }
-            const grad = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * 9, m.y - m.vy * 9);
-            grad.addColorStop(0, `rgba(190, 240, 255, ${0.85 * m.life})`);
-            grad.addColorStop(1, 'rgba(190, 240, 255, 0)');
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 1.6;
-            ctx.beginPath();
-            ctx.moveTo(m.x, m.y);
-            ctx.lineTo(m.x - m.vx * 9, m.y - m.vy * 9);
-            ctx.stroke();
+            for (let i = shooting.length - 1; i >= 0; i--) {
+                const m = shooting[i];
+                m.x += m.vx;
+                m.y += m.vy;
+                m.life -= 0.018;
+                if (m.life <= 0 || m.x < -80 || m.y > h + 80) {
+                    shooting.splice(i, 1);
+                    continue;
+                }
+                const grad = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * 9, m.y - m.vy * 9);
+                grad.addColorStop(0, `rgba(190, 240, 255, ${0.85 * m.life})`);
+                grad.addColorStop(1, 'rgba(190, 240, 255, 0)');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                ctx.moveTo(m.x, m.y);
+                ctx.lineTo(m.x - m.vx * 9, m.y - m.vy * 9);
+                ctx.stroke();
+            }
         }
 
         requestAnimationFrame(frame);
@@ -118,9 +182,12 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', (e) => {
-        targetX = e.clientX / w - 0.5;
-        targetY = e.clientY / h - 0.5;
+        mx = e.clientX;
+        my = e.clientY;
+        tx = e.clientX / w - 0.5;
+        ty = e.clientY / h - 0.5;
     }, { passive: true });
+    window.addEventListener('pointerleave', () => { mx = -9999; my = -9999; });
 
     document.addEventListener('visibilitychange', () => {
         const wasRunning = running;
@@ -130,6 +197,38 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 
     resize();
     requestAnimationFrame(frame);
+})();
+
+// ------------------------------------------------------------
+// Robot companion — floats in the corner, eyes track your cursor
+// ------------------------------------------------------------
+(function () {
+    if (prefersReducedMotion) return;
+
+    const bot = document.createElement('div');
+    bot.className = 'robo-buddy';
+    bot.setAttribute('aria-hidden', 'true');
+    bot.innerHTML = `
+        <div class="robo-antenna"><span class="robo-antenna-tip"></span></div>
+        <div class="robo-head">
+            <span class="robo-eye"></span>
+            <span class="robo-eye"></span>
+            <span class="robo-mouth"></span>
+        </div>
+        <div class="robo-body"><span class="robo-chest"></span></div>
+        <div class="robo-thruster"></div>
+    `;
+    document.body.appendChild(bot);
+
+    // eyes follow the cursor
+    window.addEventListener('pointermove', (e) => {
+        const rect = bot.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height * 0.3;
+        const ang = Math.atan2(e.clientY - cy, e.clientX - cx);
+        bot.style.setProperty('--eye-x', (Math.cos(ang) * 2.4).toFixed(1) + 'px');
+        bot.style.setProperty('--eye-y', (Math.sin(ang) * 2.4).toFixed(1) + 'px');
+    }, { passive: true });
 })();
 
 // ------------------------------------------------------------
