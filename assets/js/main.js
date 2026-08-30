@@ -385,13 +385,4 @@ window.observeReveals = observeReveals;
         document.documentElement.setAttribute('data-theme', next);
         try { localStorage.setItem('theme', next); } catch (_) {}
     });
-
-    // If the user hasn't picked a theme, follow system changes live
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    mq.addEventListener('change', (e) => {
-        try {
-            if (localStorage.getItem('theme')) return;
-        } catch (_) {}
-        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    });
 })();
